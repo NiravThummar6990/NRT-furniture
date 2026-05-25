@@ -1,4 +1,3 @@
-import Bedroom from "@/app/bedroom/bedroom";
 import { BedroomProductData, DiningProductData, LivingRoomProductData, OfficeProductData, OutdoorProductData, ProductData, type producttype } from "@/data/productData"
 
 export default function handleSearchProduct(search: string):producttype[] {

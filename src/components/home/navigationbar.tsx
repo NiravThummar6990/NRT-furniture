@@ -10,7 +10,6 @@ import type { producttype } from "@/data/productData"
 export default function Navigationbar({
   bgcolor,
   scrollHeight = window.innerHeight,
-  navplaceholdercolor,
 }: {
   bgcolor?: string
   scrollHeight?: number
