@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom"
 import { Button } from "../ui/button"
 import { useEffect, useState } from "react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group"
-import { Search } from "lucide-react"
+import { BaggageClaim, Search } from "lucide-react"
 import { useProductContext } from "@/context/globalContext"
 import handleSearchProduct from "@/func/func-search-file"
 import type { producttype } from "@/data/productData"
@@ -56,7 +56,7 @@ export default function Navigationbar({
 
   const MenuItem: Menubar[] = [
     { name: "HOME", link: "/" },
-    { name: "PRODUCTS", link: "/products" },
+    // { name: "PRODUCTS", link: "/products" },
     { name: "LIVING", link: "/living" },
     { name: "DINING", link: "/dining" },
     { name: "BEDROOM", link: "/bedroom" },
@@ -76,10 +76,10 @@ export default function Navigationbar({
           showBg ? (bgcolor ? bgcolor : "bg-[#D2CBC3]") : "bg-transparent"
         }`}
       >
-        <div className="flex items-center gap-x-8">
+        <div className="flex items-center gap-x-4">
           <Link
             to="/"
-            className="px-2 font-heading text-3xl tracking-[6px] md:px-8 md:text-[48px] md:tracking-[8px]"
+            className="px-2 font-heading text-3xl tracking-[6px] md:px-3 md:text-[48px] md:tracking-[8px]"
           >
             NRT
           </Link>
@@ -102,7 +102,7 @@ export default function Navigationbar({
           </div>
         </div>
 
-        <div className="flex items-center gap-3 md:gap-6">
+        <div className="flex items-center gap-3 md:gap-4">
           <InputGroup
             className={`md:text-md relative flex cursor-pointer items-center border-none bg-white p-3 px-2.5 font-heading text-sm font-medium shadow-lg transition-all md:px-4 ${
               showBg
@@ -128,6 +128,7 @@ export default function Navigationbar({
                   : "placeholder:text-[#F5F0E8]"
               }
             />
+
             <InputGroupAddon
               className={
                 showBg
@@ -139,6 +140,7 @@ export default function Navigationbar({
             >
               <Search />
             </InputGroupAddon>
+
             <InputGroupAddon
               className={`h-4.5 w-4.5 rounded-2xl ${searchResult.length == 0 || search == "" ? "" : "bg-[#F5F0E8]"} text-[#1F1917]`}
               align="inline-end"
@@ -148,6 +150,7 @@ export default function Navigationbar({
                 : searchResult.length}
             </InputGroupAddon>
           </InputGroup>
+
           {search !== "" && (
             <div
               className={`absolute top-16 max-h-64 min-w-[200px] gap-2 overflow-auto bg-white p-4 shadow`}
@@ -176,17 +179,32 @@ export default function Navigationbar({
             </div>
           )}
 
-          <Button
-            variant="default"
-            className={`md:text-md flex items-center border-none px-3 font-heading text-sm font-medium shadow-lg transition-all hover:scale-105 md:px-4 ${
-              showBg
-                ? "bg-transparent text-primary hover:bg-transparent"
-                : "bg-gradient-to-r from-primary to-[#cbaa78] text-white hover:from-[#cbaa78] hover:to-primary"
-            }`}
-          >
-            <Link to="/cart" className="hidden sm:inline">
-              CART
+          {/* Cart Button */}
+          <button>
+            <Link
+              to="/cart"
+              className={`group relative flex items-center justify-center border border-[#C8A84B] bg-white/90 p-2 shadow transition-all duration-200 hover:bg-[#FFF8E7] hover:shadow-lg focus:ring-2 focus:ring-[#C8A84B]/60 focus:outline-none ${showBg ? "text-[#3F2305]" : "text-[#C8A84B]"}`}
+              aria-label="View Cart"
+            >
+              <BaggageClaim className="h-6 w-6 transition-colors duration-200" />
+              {/* Example for cart count badge (hide/delete if not needed) */}
+              {/* <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#C8A84B] text-xs font-semibold text-white shadow-md">2</span> */}
             </Link>
+          </button>
+
+          <Button
+            variant="ghost"
+            asChild
+            className="rounded-none border border-[#C8A84B] bg-white px-5 py-2 font-serif text-sm font-semibold tracking-widest text-[#3F2305] transition-all hover:bg-[#FFF8E7]"
+          >
+            <Link to="/login">LOGIN</Link>
+          </Button>
+          <Button
+            variant="ghost"
+            asChild
+            className="rounded-none border border-[#C8A84B] bg-white px-5 py-2 font-serif text-sm font-semibold tracking-widest text-[#3F2305] transition-all hover:bg-[#C8A84B] hover:text-white"
+          >
+            <Link to="/register">SIGN UP</Link>
           </Button>
 
           <button
@@ -232,7 +250,7 @@ export default function Navigationbar({
                 to={i.link}
                 key={i.name}
                 onClick={() => setMenuOpen(false)}
-                className={`border-b border-[#BFB9B0] py-2 font-heading text-2xl tracking-widest transition-colors ${
+                className={`border-b border-[#BFB9B0] py-2 font-heading text-xl tracking-widest transition-colors ${
                   isActive(i.link)
                     ? "font-semibold text-primary"
                     : "text-[#3A2F24] hover:text-primary"

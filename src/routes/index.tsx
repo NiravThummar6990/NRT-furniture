@@ -10,6 +10,7 @@ import Products from "@/app/products/products"
 import { Route, Routes } from "react-router-dom"
 import MainLayout from "../layout/mainLayout"
 import Login from "@/app/login"
+import Register from "@/app/register"
 
 export default function Approute() {
   return (
@@ -19,6 +20,7 @@ export default function Approute() {
         <Route path="/product/:id" element={<Product />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route element={<MainLayout />}>
           <Route path="/products" element={<Products />} />
           <Route path="/living" element={<Living />} />
