@@ -38,7 +38,7 @@ export default function Cart() {
           navplaceholdercolor=""
           bgcolor="bg-[#F5F0E8]"
         />
-        <div className="mt-24 w-full max-w-3xl rounded-3xl border border-[#E8DFD0] bg-[#FDFAF5] p-6 shadow-lg">
+        <div className="mt-24 mb-6 w-full max-w-3xl rounded-3xl border border-[#E8DFD0] bg-[#FDFAF5] p-6 shadow-lg">
           <h1 className="pb-4 text-center font-heading text-3xl tracking-wider text-[#2C2118] md:text-4xl">
             Shopping Cart
           </h1>
