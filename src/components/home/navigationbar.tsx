@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom"
 import { Button } from "../ui/button"
 import { useEffect, useState } from "react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group"
-import { BaggageClaim, Search } from "lucide-react"
+import { BaggageClaim, Search, X } from "lucide-react"
 import { useProductContext } from "@/context/globalContext"
 import handleSearchProduct from "@/func/func-search-file"
 import type { producttype } from "@/data/productData"
@@ -22,7 +22,7 @@ export default function Navigationbar({
   }
 
   const [showBg, setShowBg] = useState(false)
-
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
   // Fix: Explicitly type state as ProductType[]
@@ -102,114 +102,119 @@ export default function Navigationbar({
           </div>
         </div>
 
-        <div className="flex items-center gap-3 md:gap-4">
-          <InputGroup
-            className={`md:text-md relative flex cursor-pointer items-center border-none bg-white p-3 px-2.5 font-heading text-sm font-medium shadow-lg transition-all md:px-4 ${
-              showBg
-                ? "bg-transparent text-primary hover:bg-transparent"
-                : "bg-gradient-to-r from-primary to-[#cbaa78] text-white"
-            }`}
-          >
-            <InputGroupInput
-              placeholder="Search . . ."
-              value={search}
-              onChange={(e) => {
-                const SearchResult: producttype[] = handleSearchProduct(
-                  e.target.value
-                )
-                setSearchResult(SearchResult)
-                setSearch(e.target.value)
-              }}
-              className={
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* Search — desktop only */}
+          <div className="relative hidden md:block">
+            <InputGroup
+              className={`flex items-center gap-2 border px-3 py-1.5 transition-all ${
                 showBg
-                  ? navplaceholdercolor
-                    ? `placeholder:text-[${navplaceholdercolor}]`
-                    : ""
-                  : "placeholder:text-[#F5F0E8]"
-              }
-            />
-
-            <InputGroupAddon
-              className={
-                showBg
-                  ? navplaceholdercolor
-                    ? `placeholder:text-[${navplaceholdercolor}]`
-                    : "placeholder:text-primary"
-                  : "placeholder:text-[#F5F0E8]"
-              }
+                  ? "border-[#C8A84B] bg-white"
+                  : "border-white/50 bg-white/10"
+              }`}
             >
-              <Search />
-            </InputGroupAddon>
-
-            <InputGroupAddon
-              className={`h-4.5 w-4.5 rounded-2xl ${searchResult.length == 0 || search == "" ? "" : "bg-[#F5F0E8]"} text-[#1F1917]`}
-              align="inline-end"
-            >
-              {searchResult.length == 0 || search == ""
-                ? ""
-                : searchResult.length}
-            </InputGroupAddon>
-          </InputGroup>
-
-          {search !== "" && (
-            <div
-              className={`absolute top-16 max-h-64 min-w-[200px] gap-2 overflow-auto bg-white p-4 shadow`}
-            >
-              {searchResult.length > 0 ? (
-                <div>
-                  {searchResult.map((e) => (
-                    <div key={e.id} className="flex flex-col gap-2 p-1">
-                      <Link
-                        to={`/product/${e.id}`}
-                        className="flex gap-2 rounded p-1 transition hover:bg-gray-100"
-                        onClick={() => {
-                          setSearch("")
-                          setSearchResult([])
-                        }}
-                      >
-                        <img src={e.url} alt={e.name} width={30} height={30} />
-                        {e.name}
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <span className="text-sm text-gray-400">No search result!</span>
+              <Search
+                className={`h-3.5 w-3.5 flex-shrink-0 ${showBg ? "text-[#9a8060]" : "text-white/60"}`}
+              />
+              <InputGroupInput
+                placeholder="Search..."
+                value={search}
+                onChange={(e) => {
+                  const SearchResult: producttype[] = handleSearchProduct(
+                    e.target.value
+                  )
+                  setSearchResult(SearchResult)
+                  setSearch(e.target.value)
+                }}
+                className={`w-24 bg-transparent font-heading text-sm transition-all outline-none focus:w-36 ${
+                  showBg
+                    ? "text-[#3F2305] placeholder:text-[#9a8060]"
+                    : "text-white placeholder:text-white/50"
+                }`}
+              />
+              {search !== "" && searchResult.length > 0 && (
+                <InputGroupAddon align="inline-end">
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-sm bg-[#C8A84B] px-1 text-[10px] font-semibold text-white">
+                    {searchResult.length}
+                  </span>
+                </InputGroupAddon>
               )}
-            </div>
-          )}
+            </InputGroup>
 
-          {/* Cart Button */}
-          <button>
-            <Link
-              to="/cart"
-              className={`group relative flex items-center justify-center border border-[#C8A84B] bg-white/90 p-2 shadow transition-all duration-200 hover:bg-[#FFF8E7] hover:shadow-lg focus:ring-2 focus:ring-[#C8A84B]/60 focus:outline-none ${showBg ? "text-[#3F2305]" : "text-[#C8A84B]"}`}
-              aria-label="View Cart"
-            >
-              <BaggageClaim className="h-6 w-6 transition-colors duration-200" />
-              {/* Example for cart count badge (hide/delete if not needed) */}
-              {/* <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-[#C8A84B] text-xs font-semibold text-white shadow-md">2</span> */}
-            </Link>
+            {/* Search dropdown — desktop */}
+            {search !== "" && (
+              <div className="absolute top-10 z-50 max-h-64 min-w-[220px] overflow-auto border border-[#C8A84B]/20 bg-white shadow-lg">
+                {searchResult.length > 0 ? (
+                  searchResult.map((e) => (
+                    <Link
+                      key={e.id}
+                      to={`/product/${e.id}`}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#3F2305] transition hover:bg-[#FFF8E7]"
+                      onClick={() => {
+                        setSearch("")
+                        setSearchResult([])
+                      }}
+                    >
+                      <img
+                        src={e.url}
+                        alt={e.name}
+                        width={28}
+                        height={28}
+                        className="rounded-sm object-cover"
+                      />
+                      <span className="font-heading">{e.name}</span>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="px-4 py-3 text-sm text-[#9a8060]">
+                    No results found
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Search icon — mobile only (toggle) */}
+          <button
+            className={`flex items-center justify-center md:hidden ${showBg ? "text-[#3F2305]" : "text-white"}`}
+            onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+            aria-label="Search"
+          >
+            <Search className="h-5 w-5" />
           </button>
 
+          {/* Cart */}
+          <Link
+            to="/cart"
+            className={`relative flex items-center justify-center border border-[#C8A84B] p-1.5 transition-all hover:bg-[#FFF8E7] md:p-2 ${
+              showBg ? "bg-white text-[#3F2305]" : "bg-white/10 text-[#C8A84B]"
+            }`}
+            aria-label="View Cart"
+          >
+            <BaggageClaim className="h-5 w-5 md:h-6 md:w-6" />
+          </Link>
+
+          {/* LOGIN + SIGN UP — desktop only */}
           <Button
             variant="ghost"
             asChild
-            className="rounded-none border border-[#C8A84B] bg-white px-5 py-2 font-serif text-sm font-semibold tracking-widest text-[#3F2305] transition-all hover:bg-[#FFF8E7]"
+            className="hidden rounded-none border border-[#C8A84B] bg-white px-4 py-2 font-serif text-sm font-semibold tracking-widest text-[#3F2305] transition-all hover:bg-[#FFF8E7] lg:flex"
           >
             <Link to="/login">LOGIN</Link>
           </Button>
           <Button
             variant="ghost"
             asChild
-            className="rounded-none border border-[#C8A84B] bg-white px-5 py-2 font-serif text-sm font-semibold tracking-widest text-[#3F2305] transition-all hover:bg-[#C8A84B] hover:text-white"
+            className="hidden rounded-none border border-[#C8A84B] bg-white px-4 py-2 font-serif text-sm font-semibold tracking-widest text-[#3F2305] transition-all hover:bg-[#C8A84B] hover:text-white lg:flex"
           >
             <Link to="/register">SIGN UP</Link>
           </Button>
 
+          {/* Hamburger — mobile/tablet */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex h-9 w-9 flex-col items-center justify-center gap-[5px] focus:outline-none lg:hidden"
+            className={`flex h-9 w-9 flex-col items-center justify-center gap-[5px] focus:outline-none lg:hidden ${
+              showBg ? "text-[#3F2305]" : "text-white"
+            }`}
             aria-label="Toggle menu"
           >
             <span
@@ -223,6 +228,73 @@ export default function Navigationbar({
             />
           </button>
         </div>
+
+        {/* Mobile search bar — slides down when open */}
+        {/* Mobile search bar — slides down when open */}
+        {mobileSearchOpen && (
+          <div className="relative border-t border-[#C8A84B]/20 bg-white px-4 py-3 md:hidden">
+            <div className="flex items-center gap-2 border-b border-[#C8A84B] pb-2">
+              <Search className="h-4 w-4 flex-shrink-0 text-[#9a8060]" />
+              <input
+                autoFocus
+                placeholder="Search products..."
+                value={search}
+                onChange={(e) => {
+                  const SearchResult: producttype[] = handleSearchProduct(
+                    e.target.value
+                  )
+                  setSearchResult(SearchResult)
+                  setSearch(e.target.value)
+                }}
+                className="w-full bg-transparent font-heading text-sm text-[#3F2305] outline-none placeholder:text-[#9a8060]"
+              />
+              {search && (
+                <button
+                  onClick={() => {
+                    setSearch("")
+                    setSearchResult([])
+                  }}
+                  className="text-[#9a8060]"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            {/* Mobile search results — ABSOLUTE, floats over content */}
+            {search !== "" && (
+              <div className="absolute top-full right-0 left-0 z-[999] max-h-52 overflow-auto border border-[#C8A84B]/20 bg-white shadow-lg">
+                {searchResult.length > 0 ? (
+                  searchResult.map((e) => (
+                    <Link
+                      key={e.id}
+                      to={`/product/${e.id}`}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#3F2305] transition hover:bg-[#FFF8E7]"
+                      onClick={() => {
+                        setSearch("")
+                        setSearchResult([])
+                        setMobileSearchOpen(false)
+                      }}
+                    >
+                      <img
+                        src={e.url}
+                        alt={e.name}
+                        width={28}
+                        height={28}
+                        className="rounded-sm object-cover"
+                      />
+                      <span className="font-heading">{e.name}</span>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="px-4 py-2 text-sm text-[#9a8060]">
+                    No results found
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div

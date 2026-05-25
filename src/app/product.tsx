@@ -1,6 +1,14 @@
 import { useParams } from "react-router-dom"
 import Navigationbar from "@/components/home/navigationbar"
-import { ProductData } from "@/data/productData"
+import {
+  BedroomProductData,
+  DiningProductData,
+  LivingRoomProductData,
+  OfficeProductData,
+  OutdoorProductData,
+  ProductData,
+  type producttype,
+} from "@/data/productData"
 import { useProductContext } from "@/context/globalContext"
 
 import { toast, Toaster } from "sonner"
@@ -11,6 +19,32 @@ import { getTodayInformation } from "@/data/todayInformation"
 
 export default function Product() {
   const { id } = useParams<{ id: string }>()
+  const prodId = Number(id)
+  // if (!id) return
+  let productDetail: producttype | undefined
+  if (prodId > 0 && prodId <= 16) {
+    productDetail = ProductData.find((item) => String(item.id) === String(id))
+  } else if (prodId >= 17 && prodId <= 28) {
+    productDetail = LivingRoomProductData.find(
+      (item) => String(item.id) === String(id)
+    )
+  } else if (prodId >= 29 && prodId <= 40) {
+    productDetail = BedroomProductData.find(
+      (item) => String(item.id) === String(id)
+    )
+  } else if (prodId >= 41 && prodId <= 52) {
+    productDetail = DiningProductData.find(
+      (item) => String(item.id) === String(id)
+    )
+  } else if (prodId >= 53 && prodId <= 64) {
+    productDetail = OutdoorProductData.find(
+      (item) => String(item.id) === String(id)
+    )
+  } else if (prodId >= 65 && prodId <= 76) {
+    productDetail = OfficeProductData.find(
+      (item) => String(item.id) === String(id)
+    )
+  }
 
   const { wishlisted, setWishlisted, added } = useProductContext()
 
@@ -23,13 +57,21 @@ export default function Product() {
     setTimeout(() => setAdded(false), 2000)
   }
 
-  const productDetail = ProductData.find(
-    (item) => String(item.id) === String(id)
-  )
+  BedroomProductData
+  DiningProductData
+  OutdoorProductData
+  OfficeProductData
+  // const productDetail = ProductData.find(
+  //   (item) => String(item.id) === String(id)
+  // )
 
   return (
     <>
-      <Navigationbar navplaceholdercolor="[#3A2F24]" bgcolor="bg-[#FFFFFF]" />
+      <Navigationbar
+        navplaceholdercolor="[#3A2F24]"
+        bgcolor="bg-[#F5F0E8]"
+        scrollHeight={-1}
+      />
       <div className="flex min-h-screen items-center justify-center bg-[#F5F0E8] p-6 md:p-10">
         <div className="flex w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-[#E8DFD0] bg-[#FDFAF5] shadow-sm md:flex-row">
           <div className="relative flex min-h-72 items-center justify-center overflow-hidden bg-[#EDE5D8] md:min-h-[420px] md:w-80">

@@ -9,6 +9,8 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { Link } from "react-router-dom"
+import { X } from "lucide-react"
 
 export function SignupForm({
   className,
@@ -20,6 +22,11 @@ export function SignupForm({
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8">
             <FieldGroup>
+              <div className="-mt-2 w-fit bg-[#F3F1F1] p-1">
+                <Link to="/ " className="hidden sm:inline">
+                  <X size={20} />
+                </Link>
+              </div>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Create your account</h1>
                 <p className="text-sm text-balance text-muted-foreground">
